@@ -8,18 +8,21 @@
 <style>
 :root{--bg:#07060f;--s:#100e1e;--a:#6c63ff;--t:#48d8bf;--tx:#eeeaf8;--m:#8885a8;--b:rgba(255,255,255,.07)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
-nav{display:flex;align-items:center;padding:20px 48px;background:rgba(7,6,15,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--b)}
+body{background:var(--bg);color:var(--tx);font-family:"DM Sans",sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(7,6,15,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--b)}
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo{width:34px;height:34px;border-radius:8px;overflow:hidden;box-shadow:0 4px 16px rgba(108,99,255,.3)}
 .nav-logo img{width:100%;height:100%;object-fit:cover}
-.nav-name{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.nav-name{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
 .nav-name em{font-style:normal;color:#48d8bf}
-.container{max-width:780px;margin:0 auto;padding:64px 24px 80px}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-link{color:var(--m);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s}
+.nav-link:hover{color:var(--tx)}
+.container{max-width:760px;margin:0 auto;padding:64px 24px 80px}
 .page-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t);margin-bottom:14px}
-h1{font-family:'DM Sans',sans-serif;font-size:42px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+h1{font-size:42px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
 .meta{font-size:13px;color:var(--m);margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--b)}
-h2{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;margin:40px 0 14px;color:var(--tx)}
+h2{font-size:22px;font-weight:700;margin:40px 0 14px;color:var(--tx)}
 p{color:rgba(238,234,248,.75);margin-bottom:16px;font-size:15px}
 ul{color:rgba(238,234,248,.75);margin:0 0 16px 20px;font-size:15px}
 ul li{margin-bottom:8px}
@@ -32,29 +35,32 @@ footer a:hover{color:var(--t)}
 .footer-logo{width:20px;height:20px;border-radius:5px;overflow:hidden}
 .footer-logo img{width:100%;height:100%;object-fit:cover}
 .footer-links{display:flex;gap:20px}
-.highlight{background:rgba(72,216,191,.08);border:1px solid rgba(72,216,191,.2);border-radius:12px;padding:18px 22px;margin-bottom:24px}.highlight p{margin:0;color:var(--tx);font-weight:500}
-@media(max-width:640px){nav{padding:16px 20px}footer{padding:24px 20px;flex-direction:column}}
+.highlight{background:rgba(72,216,191,.08);border:1px solid rgba(72,216,191,.2);border-radius:12px;padding:18px 22px;margin-bottom:28px}.highlight p{margin:0;color:var(--tx);font-weight:500}
+@media(max-width:640px){nav{padding:14px 20px}.nav-links{gap:12px}footer{padding:24px 20px;flex-direction:column}}
 </style>
 </head>
 <body>
 <nav>
-  <a href="./index.html" class="nav-brand">
+  <a href="/" class="nav-brand">
     <div class="nav-logo"><img src="data:image/png;base64,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" alt="SnipTranslate"></div>
     <div class="nav-name">Snip<em>Translate</em></div>
   </a>
+  <div class="nav-links">
+    <a href="/" class="nav-link">Home</a>
+    <a href="/pricing.html" class="nav-link">Pricing</a>
+  </div>
 </nav>
 <div class="container">
-<div class="page-label">Legal</div>
-<h1>Privacy Policy</h1>
-<div class="meta">Last updated: January 1, 2025 · Contact: <a href="mailto:aliamazn98@gmail.com">aliamazn98@gmail.com</a></div>
-<div class="highlight"><p>🔒 SnipTranslate does not collect, store, or sell your personal data. Text you translate is sent directly to translation APIs and is never stored on our servers.</p></div>
-<h2>1. Information We Collect</h2><ul><li><strong>Text for translation:</strong> Sent directly to third-party APIs. Never stored by us.</li><li><strong>Images for OCR:</strong> Sent to OCR.space API. Never stored by us.</li><li><strong>Usage count:</strong> Stored locally in your browser to enforce the free tier daily limit. Never leaves your device.</li><li><strong>Language preferences:</strong> Stored locally in your browser for convenience.</li></ul>
+  <div class="page-label">Legal</div>
+  <h1>Privacy Policy</h1>
+  <div class="meta">Last updated: January 1, 2025 · <a href="mailto:aliamazn98@gmail.com">aliamazn98@gmail.com</a></div>
+  <div class="highlight"><p>🔒 SnipTranslate does not collect, store, or sell your personal data. Text you translate is sent directly to translation APIs and never stored on our servers.</p></div>
+<h2>1. Information We Collect</h2><ul><li><strong>Text for translation:</strong> Sent directly to third-party APIs. Never stored by us.</li><li><strong>Images for OCR:</strong> Sent to OCR.space API. Never stored by us.</li><li><strong>Usage count:</strong> Stored locally in your browser to enforce the free tier daily limit.</li><li><strong>Language preferences:</strong> Stored locally in your browser for convenience.</li></ul>
 <h2>2. Information We Do NOT Collect</h2><ul><li>Your name, email, or personal identifiers</li><li>Your browsing history or visited websites</li><li>Analytics or tracking data</li><li>We do not sell or share data with advertisers</li></ul>
-<h2>3. Third-Party Services</h2><ul><li><strong>Google Translate API:</strong> Used for translation. Subject to Google's Privacy Policy.</li><li><strong>MyMemory API:</strong> Fallback translation. Subject to MyMemory's Privacy Policy.</li><li><strong>OCR.space API:</strong> Image text recognition (Pro). Subject to OCR.space's Privacy Policy.</li><li><strong>Paddle:</strong> Payment processor. Subject to Paddle's Privacy Policy.</li></ul>
-<h2>4. Data Storage</h2><p>All preferences and usage data are stored locally on your device using Chrome's built-in storage APIs. This data does not leave your browser except as described above.</p>
-<h2>5. Children's Privacy</h2><p>SnipTranslate is not directed at children under 13. We do not knowingly collect personal information from children.</p>
-<h2>6. Changes to This Policy</h2><p>We may update this Privacy Policy from time to time. We will notify users of significant changes by updating the date at the top of this page.</p>
-<h2>7. Contact</h2><p>For questions about this Privacy Policy, contact us at <a href="mailto:aliamazn98@gmail.com">aliamazn98@gmail.com</a>.</p>
+<h2>3. Third-Party Services</h2><ul><li><strong>Google Translate API:</strong> Used for translation. Subject to Google Privacy Policy.</li><li><strong>MyMemory API:</strong> Fallback translation. Subject to MyMemory Privacy Policy.</li><li><strong>OCR.space API:</strong> Image text recognition (Pro). Subject to OCR.space Privacy Policy.</li><li><strong>Paddle:</strong> Payment processor. Subject to Paddle Privacy Policy.</li></ul>
+<h2>4. Data Storage</h2><p>All preferences and usage data are stored locally on your device using Chrome built-in storage APIs. This data does not leave your browser except as described above.</p>
+<h2>5. Changes to This Policy</h2><p>We may update this Privacy Policy from time to time. We will notify users of significant changes by updating the date at the top of this page.</p>
+<h2>6. Contact</h2><p>For questions, contact us at <a href="mailto:aliamazn98@gmail.com">aliamazn98@gmail.com</a>.</p>
 </div>
 <footer>
   <div class="footer-brand">
@@ -62,9 +68,10 @@ footer a:hover{color:var(--t)}
     <span>© 2025 SnipTranslate · Built by Ali</span>
   </div>
   <div class="footer-links">
-    <a href="./terms.html">Terms</a>
-    <a href="./privacy.html">Privacy</a>
-    <a href="./refund.html">Refund</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/terms.html">Terms</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/refund.html">Refund</a>
   </div>
 </footer>
 </body>
