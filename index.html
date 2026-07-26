@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SnapNotes — Timestamped notes for YouTube lectures</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="icon128.png" />
+
+<!-- Paddle.js v2 (Paddle Billing). Only ever load this from Paddle's own CDN. -->
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-brand">
+      <img src="icon128.png" alt="" width="28" height="28" />
+      <span>SnapNotes</span>
+    </div>
+    <a class="nav-cta" id="navInstallBtn" href="https://chrome.google.com/webstore" target="_blank" rel="noopener">Add to Chrome</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Timestamped notes for<br />YouTube lectures.</h1>
+      <p class="hero-sub">Pause a video, jot what you learned, tap a timestamp to jump right back. Free for your first 10 notes — then unlock unlimited, for life, with a single payment.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://chrome.google.com/webstore" target="_blank" rel="noopener">Add to Chrome — it's free</a>
+        <a class="btn-ghost" href="#pricing">See pricing</a>
+      </div>
+      <img class="hero-shot" src="screenshot.png" alt="SnapNotes popup showing a note being saved" />
+    </section>
+
+    <section class="pricing" id="pricing">
+      <h2>Simple pricing</h2>
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-name">Free</div>
+          <div class="plan-price">$0</div>
+          <ul class="plan-features">
+            <li>10 saved notes, total</li>
+            <li>Unlimited videos &amp; rooms</li>
+            <li>Jump back to any timestamp</li>
+          </ul>
+          <a class="btn-ghost plan-btn" href="https://chrome.google.com/webstore" target="_blank" rel="noopener">Add to Chrome</a>
+        </div>
+
+        <div class="plan plan-highlight">
+          <div class="plan-badge">Best value</div>
+          <div class="plan-name">Lifetime</div>
+          <div class="plan-price">$19 <span>one-time</span></div>
+          <ul class="plan-features">
+            <li>Unlimited notes, forever</li>
+            <li>No subscription, ever</li>
+            <li>All future updates included</li>
+          </ul>
+          <button class="btn-primary plan-btn" id="buyBtn">Unlock unlimited</button>
+        </div>
+      </div>
+
+      <div class="success-panel" id="successPanel" hidden>
+        <h3>You're all set 🎉</h3>
+        <p>Copy this code, then open SnapNotes → tap the free-notes pill at the top → <strong>Already purchased? Enter your code</strong>.</p>
+        <div class="key-box">
+          <code id="licenseKeyText">SNAP-XXXX-XXXX-XXXX-X</code>
+          <button class="btn-primary small" id="copyKeyBtn">Copy</button>
+        </div>
+        <p class="key-note">Save this somewhere safe — if you reinstall the extension or switch computers, you'll paste it in again to unlock unlimited notes.</p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Questions</h2>
+      <details>
+        <summary>What happens after my 10 free notes?</summary>
+        <p>SnapNotes keeps working — you can still browse, organize, and revisit everything you've already saved. You just won't be able to save <em>new</em> notes until you unlock unlimited.</p>
+      </details>
+      <details>
+        <summary>Is this a subscription?</summary>
+        <p>No. It's a single one-time payment for unlimited use, for life. No renewals, no recurring charges.</p>
+      </details>
+      <details>
+        <summary>I lost my code — can I get it back?</summary>
+        <p>Check your email for the Paddle receipt, or get in touch and we'll help you recover it.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> SnapNotes</span>
+    <span><a href="terms.html">Terms &amp; Refunds</a> · <a href="privacy.html">Privacy</a> · Payments handled securely by Paddle.com</span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ---- Paddle setup -------------------------------------------------
+    // 1. Replace YOUR_PADDLE_CLIENT_TOKEN with your Paddle client-side token
+    //    (Paddle Dashboard -> Developer Tools -> Authentication).
+    // 2. Replace YOUR_PADDLE_PRICE_ID with the Price ID for your one-time
+    //    "SnapNotes Lifetime" product (Paddle Dashboard -> Catalog -> Prices).
+    // 3. In Paddle Dashboard -> Checkout -> Checkout settings, add the domain
+    //    this page is hosted on (e.g. yourname.github.io) to "Approved domains" —
+    //    Paddle.js checkout will silently fail to open on non-approved domains.
+    // 4. While testing, uncomment the Environment.set("sandbox") line below
+    //    and use a Sandbox client token + sandbox price ID instead.
+
+    // Paddle.Environment.set("sandbox");
+
+    const PADDLE_CLIENT_TOKEN = "test_e794e6832152af0ea8a69836044";
+    const PADDLE_PRICE_ID = "pri_01kydzdtk6kbqttnq0ksw1v688";
+
+    // Your deployed snapnotes-api Vercel URL (no trailing slash), e.g.
+    // "https://snapnotes-api.vercel.app"
+    const SNAPNOTES_API_BASE = "https://snapnotes-api-neon.vercel.app";
+
+    Paddle.Initialize({
+      token: PADDLE_CLIENT_TOKEN,
+      eventCallback: function (event) {
+        if (event.name === "checkout.completed") {
+          fetchLicenseKey(event.data.transaction_id);
+        }
+      },
+    });
+
+    document.getElementById("buyBtn").addEventListener("click", function () {
+      Paddle.Checkout.open({
+        items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }],
+      });
+    });
+
+    async function fetchLicenseKey(transactionId, attempt = 1) {
+      const panel = document.getElementById("successPanel");
+      panel.hidden = false;
+      panel.scrollIntoView({ behavior: "smooth", block: "center" });
+      document.getElementById("licenseKeyText").textContent = "Verifying your payment\u2026";
+      document.getElementById("copyKeyBtn").hidden = true;
+
+      try {
+        const res = await fetch(
+          `${SNAPNOTES_API_BASE}/api/checkout-success?transaction_id=${encodeURIComponent(transactionId)}`
+        );
+        const body = await res.json();
+
+        if (body.ok && body.key) {
+          document.getElementById("licenseKeyText").textContent = body.key;
+          document.getElementById("copyKeyBtn").hidden = false;
+          return;
+        }
+
+        // The webhook can occasionally beat the API's own Paddle-side
+        // verification by a second or two on a cold start — a couple of
+        // quick retries covers that without the customer noticing.
+        if (attempt < 4) {
+          setTimeout(() => fetchLicenseKey(transactionId, attempt + 1), 1500);
+          return;
+        }
+
+        document.getElementById("licenseKeyText").textContent =
+          "Couldn't verify your payment automatically. Email us your receipt and we'll sort it out.";
+      } catch (e) {
+        if (attempt < 4) {
+          setTimeout(() => fetchLicenseKey(transactionId, attempt + 1), 1500);
+          return;
+        }
+        document.getElementById("licenseKeyText").textContent =
+          "Couldn't reach our server. Email us your receipt and we'll sort it out.";
+      }
+    }
+
+    document.getElementById("copyKeyBtn").addEventListener("click", function () {
+      const text = document.getElementById("licenseKeyText").textContent;
+      navigator.clipboard.writeText(text).then(function () {
+        const btn = document.getElementById("copyKeyBtn");
+        const original = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(function () {
+          btn.textContent = original;
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
