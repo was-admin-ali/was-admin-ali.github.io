@@ -95,16 +95,9 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // ---- Paddle setup -------------------------------------------------
-    // 1. Replace YOUR_PADDLE_CLIENT_TOKEN with your Paddle client-side token
-    //    (Paddle Dashboard -> Developer Tools -> Authentication).
-    // 2. Replace YOUR_PADDLE_PRICE_ID with the Price ID for your one-time
-    //    "SnapNotes Lifetime" product (Paddle Dashboard -> Catalog -> Prices).
-    // 3. In Paddle Dashboard -> Checkout -> Checkout settings, add the domain
-    //    this page is hosted on (e.g. yourname.github.io) to "Approved domains" —
-    //    Paddle.js checkout will silently fail to open on non-approved domains.
-    // 4. While testing, uncomment the Environment.set("sandbox") line below
-    //    and use a Sandbox client token + sandbox price ID instead.
-
+    // Live credentials. To test in sandbox again later, you'd need to swap
+    // these for sandbox client token + sandbox price ID, and add back:
+    //   Paddle.Environment.set("sandbox");
 
     const PADDLE_CLIENT_TOKEN = "live_438b1172a6dd6b12e5c776a2bde";
     const PADDLE_PRICE_ID = "pri_01kynskd33xkr3k8nbch9mqhp9";
