@@ -15,28 +15,27 @@
     </div>
     <a class="nav-cta" href="index.html">Back to home</a>
   </header>
-
   <main class="legal">
     <h1>Privacy Policy</h1>
     <p class="legal-updated">Last updated: <span id="lastUpdated"></span></p>
-
-    <h2>What SnapNotes stores</h2>
+    <h2>What SnapNotes stores on your device</h2>
     <p>SnapNotes (the Chrome extension) saves the notes you write, the timestamps they're
     attached to, the titles/thumbnails/links of videos you've taken notes on, the room
     names you create, and your free-trial/license status. All of this is stored using
-    Chrome's local storage (<code>chrome.storage.local</code>) directly on your own device.</p>
-
-    <h2>What SnapNotes does <em>not</em> do</h2>
-    <ul>
-      <li>The extension does not run its own servers and does not transmit your notes,
-      video history, or any other saved data anywhere. Nothing is sent to us, sold, or
-      shared with third parties.</li>
-      <li>The extension does not use analytics or tracking scripts.</li>
-      <li>The extension does not read or collect anything from any site other than
-      YouTube video ("watch") pages, and only what's needed to show the current
-      timestamp, video title, and thumbnail.</li>
-    </ul>
-
+    Chrome's local storage (<code>chrome.storage.local</code>) directly on your own device,
+    and is never uploaded, sold, or shared with third parties.</p>
+    <h2>What SnapNotes stores elsewhere</h2>
+    <p>Your notes, video history, and rooms never leave your device. The one exception is
+    license activation: when you paste a purchased code into the extension, that code
+    (and only that code) is sent to our verification server to confirm it's real, and is
+    checked again periodically afterward to make sure it's still valid. That server also
+    stores, per license: the license code itself, the associated Paddle transaction ID,
+    and the email address Paddle gave us for that purchase (used only to help recover a
+    lost code if you contact us). No note content, video history, browsing activity, or
+    anything else is ever sent there.</p>
+    <p>The extension does not use analytics or tracking scripts, and does not read or
+    collect anything from any site other than YouTube video ("watch") pages, and only
+    what's needed to show the current timestamp, video title, and thumbnail.</p>
     <h2>Payments</h2>
     <p>If you choose to unlock unlimited notes, you'll be taken from the extension to
     this website, where payment is processed entirely by
@@ -44,30 +43,27 @@
     our payment provider and merchant of record. We do not see or store your card
     details — Paddle handles that, subject to
     <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener">Paddle's own privacy policy</a>.
-    After a successful payment, this page generates a license code in your browser and
-    displays it to you; that code is not transmitted to us either — it's simply a
-    formatted code you copy into the extension yourself.</p>
-
+    After a successful payment, this site verifies your transaction with Paddle and
+    issues a license code, which is displayed to you and also stored on our verification
+    server as described above.</p>
     <h2>Chrome sync</h2>
     <p>SnapNotes intentionally uses <code>chrome.storage.local</code> rather than
     <code>chrome.storage.sync</code>, so your notes stay on the device you created them
     on and are not automatically synced by Chrome across your devices or through your
     Google account.</p>
-
     <h2>Uninstalling</h2>
     <p>Uninstalling the extension removes all locally stored data (notes, rooms, and
-    license status) along with it, per Chrome's standard behavior for extension storage.</p>
-
+    license status) along with it, per Chrome's standard behavior for extension storage.
+    Your license record on our verification server is kept so you can re-activate the
+    same code if you reinstall later.</p>
     <h2>Contact</h2>
     <p>Questions about this policy? Reach out at
     <a href="mailto:aliamazn98@gmail.com">aliamazn98@gmail.com</a>.</p>
   </main>
-
   <footer class="footer">
     <span>© <span id="year"></span> SnapNotes</span>
     <span><a href="terms.html">Terms &amp; Refunds</a> · <a href="privacy.html">Privacy</a></span>
   </footer>
-
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     document.getElementById("lastUpdated").textContent = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
